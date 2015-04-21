@@ -1,55 +1,44 @@
 package me.dcofer.twism.model.game;
 
+import com.google.gson.annotations.SerializedName;
+
 import me.dcofer.twism.model.TwitchRoot;
 import me.dcofer.twism.model.pic.TwitchPicture;
 
 /**
  * Created by derek on 4/15/15.
  */
-public class TwitchGame extends TwitchRoot
+public class TwitchGame
 {
-    private int _id;
-    private TwitchPicture box;
-    private TwitchPicture logo;
-    private String name;
+    private int channels;
 
-    public int get_id()
+    @SerializedName("game")
+    private TwitchGameData gameData;
+
+    private int viewers;
+
+    public int getChannels()
     {
-        return _id;
+        return channels;
     }
-
-    public void set_id(int _id)
+    public void setChannels(int channels)
     {
-        this._id = _id;
+        this.channels = channels;
     }
-
-    public TwitchPicture getBox()
+    public TwitchGameData getGameData()
     {
-        return box;
+        return gameData;
     }
-
-    public void setBox(TwitchPicture box)
+    public void setGameData(TwitchGameData gameData)
     {
-        this.box = box;
+        this.gameData = gameData;
     }
-
-    public TwitchPicture getLogo()
+    public int getViewers()
     {
-        return logo;
+        return viewers;
     }
-
-    public void setLogo(TwitchPicture logo)
+    public void setViewers(int viewers)
     {
-        this.logo = logo;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
+        this.viewers = viewers;
     }
 }
