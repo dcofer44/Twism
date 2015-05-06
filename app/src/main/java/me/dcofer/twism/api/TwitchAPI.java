@@ -15,7 +15,7 @@ public interface TwitchAPI
     public static final String END_POINT = "https://api.twitch.tv/kraken";
 
     @GET("/games/top")
-    void getGames( @Query("limit") String limit,
-                   @Query("offset") String offset,
+    void getGames( @Query("limit") int limit,
+                   @Query("offset") int offset,
                    Callback<List<TwitchGame>> callback);
 }

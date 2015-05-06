@@ -10,24 +10,19 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 import me.dcofer.twism.R;
-import me.dcofer.twism.model.game.TwitchGame;
+import me.dcofer.twism.TwismAppData;
 
 /**
  * Created by derek on 4/14/15.
  */
-public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ImageHolder>
+public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ImageHolder>
 {
-    private static final int NUM_IMGS = 25;//TODO delete this later
     private Context context;
-    private List<TwitchGame> games;
 
-    public RecycleAdapter(Context context, List<TwitchGame> games)
+    public GameAdapter(Context context)
     {
         this.context = context;
-        this.games = games;
     }
 
     @Override
@@ -41,17 +36,19 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.ImageHol
     @Override
     public void onBindViewHolder(ImageHolder imageHolder, int i)
     {
-        String imageURL = games.get(i).getGameData().getBox().getLarge();
-        Picasso.with(context).load(imageURL).into(imageHolder.imageItem);
+        String imageURL = TwismAppData.GAMES.get(i).getGameData().getBox().getLarge();
+//        Picasso.with(context).load(imageURL).into(imageHolder.imageItem);
+        Picasso.with(context).load(imageURL).resize(400, 600)
+                .placeholder(R.drawable.dummy_img).into(imageHolder.imageItem);
 
-        String game = games.get(i).getGameData().getName();
+        String game = TwismAppData.GAMES.get(i).getGameData().getName();
         imageHolder.textView.setText(game);
     }
 
     @Override
     public int getItemCount()
     {
-        return games.size();
+        return TwismAppData.GAMES.size();
     }
 
     /**
