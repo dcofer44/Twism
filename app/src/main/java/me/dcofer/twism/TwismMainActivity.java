@@ -1,22 +1,27 @@
 package me.dcofer.twism;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
-import java.util.List;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import me.dcofer.twism.adapter.GameAdapter;
 import me.dcofer.twism.api.TwitchService;
+import me.dcofer.twism.listener.EndlessScrollListener;
 import me.dcofer.twism.listener.RecyclerItemClickListener;
 import me.dcofer.twism.listener.RecyclerItemImpl;
-import me.dcofer.twism.model.game.TwitchGame;
 
 
-public class TwismMainActivity extends ActionBarActivity
+public class TwismMainActivity extends ActionBarActivity implements RecyclerItemClickListener.OnItemClickListener
 {
     public static final String TAG = "TwismMainAcitivity";
 
@@ -31,8 +36,7 @@ public class TwismMainActivity extends ActionBarActivity
         setContentView(R.layout.activity_twism_main);//TODO maybe use autofit RecyclerView
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        RecyclerItemImpl listener = new RecyclerItemImpl(this);
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(listener));
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this));
 
         layoutManager = new GridLayoutManager(this, 3);
 
@@ -40,10 +44,18 @@ public class TwismMainActivity extends ActionBarActivity
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        TwitchService service = new TwitchService();
+        final TwitchService service = TwitchService.getInstance();
+        service.addGamesData(adapter);
 
-        service.init();
-        service.setData(adapter);
+        recyclerView.setOnScrollListener(new EndlessScrollListener(layoutManager)
+        {
+            @Override
+            public void onLoadMore(int currentPage)
+            {
+                Log.d(TAG, "Adding more data");
+                service.addGamesData(adapter);
+            }
+        });
     }
 
 
@@ -69,5 +81,24 @@ public class TwismMainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(View view, int position)
+    {
+        String name = TwismAppData.getGameName(position);
+        String encodedName = "";
+        try {
+            encodedName = URLEncoder.encode(name, "UTF-8");
+        } catch(UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, encodedName, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public Context getContext()
+    {
+        return this;
     }
 }

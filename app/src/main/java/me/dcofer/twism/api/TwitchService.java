@@ -27,11 +27,13 @@ public class TwitchService
 {
     private static final String TAG = "TwitchService";
 
+    private static  TwitchService instance = null;
+
     private RequestInterceptor interceptor;
 
     private TwitchAPI api;
 
-    public TwitchService()
+    private TwitchService()
     {
         this.interceptor = new RequestInterceptor()
         {
@@ -42,13 +44,10 @@ public class TwitchService
                 request.addHeader("Client-ID", TwismAppData.CLIENT_ID);
             }
         };
-    }
 
-    public void init()
-    {
-        Type type = new TypeToken<List<TwitchGame>>(){}.getType();
+        Type twitchGameType = new TypeToken<List<TwitchGame>>(){}.getType();
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(type, new GameDeserializer());
+        gsonBuilder.registerTypeAdapter(twitchGameType, new GameDeserializer());
         Gson gson = gsonBuilder.create();
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(TwitchAPI.END_POINT)
@@ -56,10 +55,17 @@ public class TwitchService
                 .setRequestInterceptor(interceptor)
                 .build();
         api = restAdapter.create(TwitchAPI.class);
-
     }
 
-    public void setData(final Adapter adapter)
+    public static TwitchService getInstance()
+    {
+        if(instance == null)
+            instance = new TwitchService();
+
+        return instance;
+    }
+
+    public void addGamesData(final Adapter adapter)
     {
         int limit = TwismAppData.DEFAULT_LIMIT;
         int offset = TwismAppData.getGameOffset();
