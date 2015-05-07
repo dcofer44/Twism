@@ -1,6 +1,7 @@
 package me.dcofer.twism;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,10 +16,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import me.dcofer.twism.adapter.GameAdapter;
+import me.dcofer.twism.adapter.StreamAdapter;
 import me.dcofer.twism.api.TwitchService;
 import me.dcofer.twism.listener.EndlessScrollListener;
 import me.dcofer.twism.listener.RecyclerItemClickListener;
-import me.dcofer.twism.listener.RecyclerItemImpl;
 
 
 public class TwismMainActivity extends ActionBarActivity implements RecyclerItemClickListener.OnItemClickListener
@@ -35,14 +36,13 @@ public class TwismMainActivity extends ActionBarActivity implements RecyclerItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_twism_main);//TODO maybe use autofit RecyclerView
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this));
-
         layoutManager = new GridLayoutManager(this, 3);
-
         adapter = new GameAdapter(TwismMainActivity.this);
+
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this));
+
 
         final TwitchService service = TwitchService.getInstance();
         service.addGamesData(adapter);
@@ -87,13 +87,9 @@ public class TwismMainActivity extends ActionBarActivity implements RecyclerItem
     public void onItemClick(View view, int position)
     {
         String name = TwismAppData.getGameName(position);
-        String encodedName = "";
-        try {
-            encodedName = URLEncoder.encode(name, "UTF-8");
-        } catch(UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        Toast.makeText(this, encodedName, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, StreamsActivity.class);
+        intent.putExtra(StreamsActivity.GAME_NAME, name);
+        startActivity(intent);
     }
 
     @Override

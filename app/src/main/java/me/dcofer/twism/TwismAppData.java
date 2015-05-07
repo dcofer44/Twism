@@ -3,6 +3,7 @@ package me.dcofer.twism;
 import java.util.ArrayList;
 
 import me.dcofer.twism.model.game.TwitchGame;
+import me.dcofer.twism.model.stream.TwitchStream;
 
 /**
  * Created by derek on 4/21/15.
@@ -16,13 +17,25 @@ public class TwismAppData
 
     public static ArrayList<TwitchGame> GAMES = new ArrayList<>();
 
+    public static ArrayList<TwitchStream> STREAMS = new ArrayList<>();
+
     public static int getGameOffset()
     {
         return GAMES.size();
     }
 
+    public static int getStreamOffset()
+    {
+        return STREAMS.size();
+    }
+
     public static String getGameName(int position)
     {
         return GAMES.get(position).getGameData().getName();
+    }
+
+    public static void clearStreams()
+    {
+        STREAMS.clear();
     }
 }
