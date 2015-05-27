@@ -10,13 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import me.dcofer.twism.adapter.GameAdapter;
-import me.dcofer.twism.adapter.StreamAdapter;
 import me.dcofer.twism.api.TwitchService;
 import me.dcofer.twism.listener.EndlessScrollListener;
 import me.dcofer.twism.listener.RecyclerItemClickListener;
